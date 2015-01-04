@@ -26,9 +26,9 @@ defmodule Flex.CLI do
     requirements (in $PATH):
 
     * `flac`
-    * `lame` 
+    * `lame`
     """
-    System.halt(0)
+    System.halt(1)
   end
 
 end
