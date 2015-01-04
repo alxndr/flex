@@ -1,8 +1,8 @@
-defmodule Flac2mp3.Mixfile do
+defmodule Flex.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :flac2mp3,
+    [app: :flex,
      version: "0.0.1",
      elixir: "~> 1.0.0",
      deps: deps,
@@ -10,7 +10,7 @@ defmodule Flac2mp3.Mixfile do
   end
 
   defp escript do
-    [main_module: Flac2mp3.CLI]
+    [main_module: Flex.CLI]
   end
 
   def application do

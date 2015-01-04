@@ -1,4 +1,4 @@
-defmodule Flac2mp3 do
+defmodule Flex do
 
   # assumes you have flac and lame available via $PATH
 

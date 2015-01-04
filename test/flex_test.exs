@@ -1,4 +1,4 @@
-defmodule Flac2mp3Test do
+defmodule FlexTest do
   use ExUnit.Case
 
   test "the truth" do

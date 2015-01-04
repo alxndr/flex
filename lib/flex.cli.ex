@@ -1,9 +1,9 @@
-defmodule Flac2mp3.CLI do
+defmodule Flex.CLI do
 
   def main(args) do
     args
     |> parse_args
-    |> Flac2mp3.convert_dir
+    |> Flex.convert_dir
   end
 
   defp parse_args(args) do
@@ -17,7 +17,7 @@ defmodule Flac2mp3.CLI do
 
   defp help do
     IO.puts """
-    usage: flac2mp3 --dir=<directory>
+    usage: flex --dir=<directory>
 
     optional flags:
 
