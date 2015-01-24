@@ -14,15 +14,27 @@ defmodule Flex do
     wavfile = Path.join(dirname, "#{basename}.wav")
     mp3file = Path.join(dirname, "#{basename}.mp3")
 
+    flac_to_wav = fn ->
+      System.cmd("flac", [ "--silent", "--force", "--decode", "--output-name", wavfile, flacfile], stderr_to_stdout: false)
+    end
+
+    wav_to_mp3 = fn ->
+      System.cmd "lame", [ "--silent", "--abr", "320", wavfile, mp3file], stderr_to_stdout: false
+    end
+
+    remove_wav = fn ->
+      System.cmd "rm", [wavfile]
+    end
+
     IO.write "starting on #{basename}..."
 
-    Task.async(fn -> System.cmd("flac", [ "--silent", "--force", "--decode", "--output-name", wavfile, flacfile], stderr_to_stdout: false) end)
+    Task.async(flac_to_wav)
     |> Task.await 10*@sec
 
-    Task.async(fn -> System.cmd "lame", [ "--silent", "--abr", "320", wavfile, mp3file], stderr_to_stdout: false end)
+    Task.async(wav_to_mp3)
     |> Task.await 30*@sec
 
-    Task.async(fn -> System.cmd "rm", [wavfile] end)
+    Task.async(remove_wav)
     |> Task.await 1*@sec
 
     IO.puts " done"
