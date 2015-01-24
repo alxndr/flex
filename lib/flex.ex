@@ -3,27 +3,29 @@ defmodule Flex do
   Finds .flac files and creates corresponding .wav and then .mp3 files from them.
   """
 
+  @sec 1_000
+
   @doc """
   Given a string representing a .flac file, create a corresponding .mp3 file for the .flac file.
   """
   def convert_flac(flacfile) do
-    IO.puts "starting on #{flacfile}"
-
     dirname = Path.dirname(flacfile)
     basename = Path.basename(flacfile, ".flac")
     wavfile = Path.join(dirname, "#{basename}.wav")
     mp3file = Path.join(dirname, "#{basename}.mp3")
 
+    IO.write "starting on #{basename}..."
+
     Task.async(fn -> System.cmd("flac", [ "--silent", "--force", "--decode", "--output-name", wavfile, flacfile], stderr_to_stdout: false) end)
-    |> Task.await 10_000
+    |> Task.await 10*@sec
 
     Task.async(fn -> System.cmd "lame", [ "--silent", "--abr", "320", wavfile, mp3file], stderr_to_stdout: false end)
-    |> Task.await 30_000
+    |> Task.await 30*@sec
 
     Task.async(fn -> System.cmd "rm", [wavfile] end)
-    |> Task.await 1_000
+    |> Task.await 1*@sec
 
-    IO.puts "done: #{mp3file}"
+    IO.puts " done"
   end
 
   @doc """
