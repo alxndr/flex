@@ -46,10 +46,11 @@ defmodule Flex do
   def convert_dir(dir\\".") do
     check_dependencies
 
-    Path.expand(dir)
-    |> Path.join("**/*.flac")
-    |> Path.wildcard
-    |> Enum.each(&(convert_flac(&1)))
+    flac_files = Path.expand(dir)
+                  |> Path.join("**/*.flac")
+                  |> Path.wildcard
+
+    Enum.map flac_files, &(convert_flac/1)
   end
 
   #@doc """
