@@ -1,7 +1,11 @@
 defmodule Flex do
+  @moduledoc """
+  Finds .flac files and creates corresponding .wav and then .mp3 files from them.
+  """
 
-  # assumes you have flac and lame available via $PATH
-
+  @doc """
+  Given a string representing a .flac file, create a corresponding .mp3 file for the .flac file.
+  """
   def convert_flac(flacfile) do
     IO.puts "starting on #{flacfile}"
 
@@ -27,6 +31,9 @@ defmodule Flex do
     IO.puts "done: #{mp3file}"
   end
 
+  @doc """
+  Given a string representing a directory, kick off conversions for each .flac file in the directory.
+  """
   def convert_dir(dir\\".") do
     check_dependencies
     Path.expand(dir)
@@ -35,6 +42,9 @@ defmodule Flex do
     |> Enum.each(&(convert_flac(&1)))
   end
 
+  #@doc """
+  #Halt if dependencies (flac; lame) are not available.
+  #"""
   defp check_dependencies do
     case System.cmd("which", ["flac"]) do
       {_, 0} -> true

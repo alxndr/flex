@@ -1,11 +1,20 @@
 defmodule Flex.CLI do
+  @moduledoc """
+  Encapsulates interactions with the command line.
+  """
 
+  @doc """
+  Entry point for escript run.
+  """
   def main(args) do
     args
     |> parse_args
     |> Flex.convert_dir
   end
 
+  #@doc """
+  #React to command-line arguments.
+  #"""
   defp parse_args(args) do
     {config, _, _} = OptionParser.parse(args, strict: [dir: :string])
     cond do # ugh
@@ -28,7 +37,7 @@ defmodule Flex.CLI do
     * `flac`
     * `lame`
     """
-    System.halt(1)
+    System.halt(1) # seems weird to halt in the middle of main/1
   end
 
 end
