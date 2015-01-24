@@ -14,20 +14,15 @@ defmodule Flex do
     wavfile = Path.join(dirname, "#{basename}.wav")
     mp3file = Path.join(dirname, "#{basename}.mp3")
 
-    Task.async(fn ->
-      System.cmd("flac", [ "--silent", "--force", "--decode", "--output-name", wavfile, flacfile], stderr_to_stdout: false)
-    end)
+    Task.async(fn -> System.cmd("flac", [ "--silent", "--force", "--decode", "--output-name", wavfile, flacfile], stderr_to_stdout: false) end)
     |> Task.await 10_000
 
-    Task.async(fn ->
-      System.cmd "lame", [ "--silent", "--abr", "320", wavfile, mp3file], stderr_to_stdout: false
-    end)
+    Task.async(fn -> System.cmd "lame", [ "--silent", "--abr", "320", wavfile, mp3file], stderr_to_stdout: false end)
     |> Task.await 30_000
 
-    Task.async(fn ->
-      System.cmd "rm", [wavfile]
-    end)
+    Task.async(fn -> System.cmd "rm", [wavfile] end)
     |> Task.await 1_000
+
     IO.puts "done: #{mp3file}"
   end
 
@@ -36,6 +31,7 @@ defmodule Flex do
   """
   def convert_dir(dir\\".") do
     check_dependencies
+
     Path.expand(dir)
     |> Path.join("**/*.flac")
     |> Path.wildcard
