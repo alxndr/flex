@@ -1,6 +1,8 @@
 flex
 ====
 
+[![build status](https://travis-ci.org/alxndr/flex.svg?branch=master)](https://travis-ci.org/alxndr/flex)
+
 Converts a directory's worth of `.flac` files into `.mp3` files.
 
 Dependencies (need to be available via the system's `$PATH`):
