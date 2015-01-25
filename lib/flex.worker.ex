@@ -29,6 +29,7 @@ defmodule Flex.Worker do
   @doc """
   Given a .flac filenname, extract the directory name and the file basename.
   """
+  @spec split_filename(char_list) :: {String.t, String.t}
   def split_filename(filename) do
     basename = Path.basename(filename, ".flac")
     dirname = Path.dirname(filename)
