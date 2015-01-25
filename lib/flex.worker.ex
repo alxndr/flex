@@ -27,6 +27,11 @@ defmodule Flex.Worker do
 
   @doc """
   Given a directory name and a file basename, return .mp3 and .wav filenames.
+
+  ## Examples
+
+    iex> Flex.Worker.generate_filenames("/foo/bar", "baz.qux")
+    {"/foo/bar/baz.qux.wav", "/foo/bar/baz.qux.mp3"}
   """
   @spec generate_filenames(char_list, char_list) :: {String.t, String.t}
   def generate_filenames(directory_name, basename) do
@@ -37,6 +42,11 @@ defmodule Flex.Worker do
 
   @doc """
   Given a .flac filename, extract the directory name and the file basename.
+
+  ## Examples
+
+    iex> Flex.Worker.split_filename("/foo/bar/baz.flac")
+    {"baz", "/foo/bar"}
   """
   @spec split_filename(char_list) :: {String.t, String.t}
   def split_filename(flac_filename) do
