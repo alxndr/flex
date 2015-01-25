@@ -6,34 +6,43 @@ defmodule Flex.Worker do
   @sec 1_000
 
   @doc """
-  Given a string representing a .flac file, create a corresponding .mp3 file for the .flac file.
+  Given a .flac filename, kick off and wait for System jobs to create a corresponding .mp3 file for the .flac file.
   """
-  def convert_flac(flacfile) do
-    {basename, dirname} = split_filename(flacfile)
+  def convert_flac(flac_filename) do
+    {basename, directory_name} = split_filename(flac_filename)
     IO.write "starting on #{basename}..."
-    wavfile = Path.join(dirname, "#{basename}.wav")
-    mp3file = Path.join(dirname, "#{basename}.mp3")
+    {wav_filename, mp3_filename} = generate_filenames(directory_name, basename)
 
-    Task.async(fn -> System.cmd("flac", ["--silent", "--force", "--decode", "--output-name", wavfile, flacfile], stderr_to_stdout: false) end)
+    Task.async(fn -> System.cmd("flac", ["--silent", "--force", "--decode", "--output-name", wav_filename, flac_filename], stderr_to_stdout: false) end)
     |> Task.await 10 * @sec
 
-    Task.async(fn -> System.cmd("lame", ["--silent", "--abr", "320", wavfile, mp3file], stderr_to_stdout: false) end)
+    Task.async(fn -> System.cmd("lame", ["--silent", "--abr", "320", wav_filename, mp3_filename], stderr_to_stdout: false) end)
     |> Task.await 30 * @sec
 
-    Task.async(fn -> System.cmd("rm", [wavfile]) end)
+    Task.async(fn -> System.cmd("rm", [wav_filename]) end)
     |> Task.await 1 * @sec
 
     IO.puts " done"
   end
 
   @doc """
-  Given a .flac filenname, extract the directory name and the file basename.
+  Given a directory name and a file basename, return .mp3 and .wav filenames.
+  """
+  @spec generate_filenames(char_list, char_list) :: {String.t, String.t}
+  def generate_filenames(directory_name, basename) do
+    wav_filename = Path.join(directory_name, "#{basename}.wav")
+    mp3_filename = Path.join(directory_name, "#{basename}.mp3")
+    {wav_filename, mp3_filename}
+  end
+
+  @doc """
+  Given a .flac filename, extract the directory name and the file basename.
   """
   @spec split_filename(char_list) :: {String.t, String.t}
-  def split_filename(filename) do
-    basename = Path.basename(filename, ".flac")
-    dirname = Path.dirname(filename)
-    {basename, dirname}
+  def split_filename(flac_filename) do
+    basename = Path.basename(flac_filename, ".flac")
+    directory_name = Path.dirname(flac_filename)
+    {basename, directory_name}
   end
 
 end
