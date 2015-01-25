@@ -15,15 +15,15 @@ defmodule Flex do
     mp3file = Path.join(dirname, "#{basename}.mp3")
 
     flac_to_wav = fn ->
-      System.cmd("flac", [ "--silent", "--force", "--decode", "--output-name", wavfile, flacfile], stderr_to_stdout: false)
+      System.cmd("flac", ["--silent", "--force", "--decode", "--output-name", wavfile, flacfile], stderr_to_stdout: false)
     end
 
     wav_to_mp3 = fn ->
-      System.cmd "lame", [ "--silent", "--abr", "320", wavfile, mp3file], stderr_to_stdout: false
+      System.cmd("lame", ["--silent", "--abr", "320", wavfile, mp3file], stderr_to_stdout: false)
     end
 
     remove_wav = fn ->
-      System.cmd "rm", [wavfile]
+      System.cmd("rm", [wavfile])
     end
 
     IO.write "starting on #{basename}..."
@@ -46,11 +46,11 @@ defmodule Flex do
   def convert_dir(dir\\".") do
     check_dependencies
 
-    flac_files = Path.expand(dir)
-                  |> Path.join("**/*.flac")
-                  |> Path.wildcard
-
-    Enum.map flac_files, &(convert_flac/1)
+    Path.expand(dir)
+    |> Path.join("**/*.flac")
+    |> Path.wildcard
+    |> Stream.map(&(Task.async(fn -> convert_flac(&1) end)))
+    |> Enum.map(&(Task.await &1, 50 * @sec))
   end
 
   #@doc """
