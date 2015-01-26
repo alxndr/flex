@@ -10,10 +10,11 @@ defmodule Flex do
   """
   def convert_dir(dir\\".") do
     check_dependencies
+    {:ok, supervisor} = Task.Supervisor.start_link(name: :flac_converter)
     Path.expand(dir)
     |> Path.join("**/*.flac")
     |> Path.wildcard
-    |> Stream.map(&(Task.async(fn -> Flex.Worker.convert_flac(&1) end)))
+    |> Stream.map(&(Task.Supervisor.async(supervisor, Flex.Worker, :convert_flac, [&1])))
     |> Enum.map(&(Task.await &1, 50 * @sec))
   end
 
