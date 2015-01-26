@@ -10,19 +10,19 @@ defmodule Flex.Worker do
   """
   def convert_flac(flac_filename) do
     {basename, directory_name} = split_filename(flac_filename)
-    IO.write "starting on #{basename}..."
+    IO.puts "starting on #{basename}..."
     {wav_filename, mp3_filename} = generate_filenames(directory_name, basename)
 
     Task.async(fn -> System.cmd("flac", ["--silent", "--force", "--decode", "--output-name", wav_filename, flac_filename], stderr_to_stdout: false) end)
-    |> Task.await 10 * @sec
+    |> Task.await(10 * @sec)
 
     Task.async(fn -> System.cmd("lame", ["--silent", "--abr", "320", wav_filename, mp3_filename], stderr_to_stdout: false) end)
-    |> Task.await 30 * @sec
+    |> Task.await(30 * @sec)
 
     Task.async(fn -> System.cmd("rm", [wav_filename]) end)
-    |> Task.await 1 * @sec
+    |> Task.await(1 * @sec)
 
-    IO.puts " done"
+    IO.puts "...#{basename} done"
   end
 
   @doc """

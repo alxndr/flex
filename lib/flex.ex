@@ -10,7 +10,6 @@ defmodule Flex do
   """
   def convert_dir(dir\\".") do
     check_dependencies
-
     Path.expand(dir)
     |> Path.join("**/*.flac")
     |> Path.wildcard
