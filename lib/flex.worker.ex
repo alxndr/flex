@@ -16,12 +16,15 @@ defmodule Flex.Worker do
 
     Task.async(fn -> System.cmd("flac", ["--silent", "--force", "--decode", "--output-name", wavfile, flacfile], stderr_to_stdout: false) end)
     |> Task.await 10 * @sec
+    IO.write "."
 
     Task.async(fn -> System.cmd("lame", ["--silent", "--abr", "320", wavfile, mp3file], stderr_to_stdout: false) end)
     |> Task.await 30 * @sec
+    IO.write "."
 
     Task.async(fn -> System.cmd("rm", [wavfile]) end)
     |> Task.await 1 * @sec
+    IO.write "."
 
     IO.puts " done"
   end
