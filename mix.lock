@@ -1,2 +1,3 @@
-%{"inch_ex": {:hex, :inch_ex, "0.2.4"},
+%{"commando": {:git, "git://github.com/alco/commando.git", "ba990152f30c64609fec0ee143f517b14f04126a", []},
+  "inch_ex": {:hex, :inch_ex, "0.2.4"},
   "poison": {:hex, :poison, "1.3.1"}}

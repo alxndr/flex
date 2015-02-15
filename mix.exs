@@ -14,10 +14,15 @@ defmodule Flex.Mixfile do
   end
 
   def application do
-    [applications: [:logger]]
+    [applications: [
+        :commando,
+        :logger,
+      ]]
   end
 
   defp deps do
-    [{:inch_ex, only: :docs}]
+    [ {:commando, github: "alco/commando"},
+      {:inch_ex, only: :docs},
+    ]
   end
 end
