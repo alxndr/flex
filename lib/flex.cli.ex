@@ -12,9 +12,6 @@ defmodule Flex.CLI do
     |> Flex.convert_dir
   end
 
-  #@doc """
-  #React to command-line arguments.
-  #"""
   defp parse_args(args) do
     {config, _, _} = OptionParser.parse(args, strict: [dir: :string])
     cond do # ugh
