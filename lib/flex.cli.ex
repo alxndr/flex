@@ -3,38 +3,48 @@ defmodule Flex.CLI do
   Encapsulates interactions with the command line.
   """
 
+  alias Commando.Cmd
+
+  @cmdspec Commando.new([
+    name: "flex",
+    help: "Convert .flac files into .mp3 files.",
+
+    options: [
+      [ name: :directory, help: "Directory to convert", argtype: :string ],
+    ],
+
+    commands: [
+      :help,
+    ]
+      #[ name: "directory",
+        #help: "Directory of .flac files to convert",
+        #arguments: [
+          #name: "dir", help: "directory path"
+        #],
+        #options: [
+          #[ name: "directory_path", argtype: :string ]
+        #]
+      #]
+    #]
+  ])
+
   @doc """
   Entry point for escript run.
   """
   def main(args) do
-    args
-    |> parse_args
-    |> Flex.convert_dir
+    :random.seed(:erlang.now)
+    Commando.exec(args, @cmdspec, actions: [
+      options: %{
+        "directory" => &do_something/2
+      }
+    ])
   end
 
-  defp parse_args(args) do
-    {config, _, _} = OptionParser.parse(args, strict: [dir: :string])
-    cond do # ugh
-      Keyword.has_key?(config, :help) -> help
-      Keyword.has_key?(config, :dir)  -> Keyword.fetch!(config, :dir)
-      true                            -> help
-    end
-  end
-
-  defp help do
-    IO.puts """
-    usage: flex --dir=<directory>
-
-    optional flags:
-
-    --help:    you're looking at it
-
-    requirements (in $PATH):
-
-    * `flac`
-    * `lame`
-    """
-    System.halt(1) # seems weird to halt in the middle of main/1
+  defp do_something(%Cmd{arguments: args, options: opts}, %Cmd{options: mainopts}=_cmdb) do
+    IO.inspect args
+    IO.inspect opts
+    IO.inspect mainopts
+    #&Flex.convert_dir/1
   end
 
 end
