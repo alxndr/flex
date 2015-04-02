@@ -15,18 +15,21 @@ defmodule Flex.Worker do
 
     # synchronous
     System.cmd "flac", ["--silent", "--force", "--decode", "--output-name", wavfile, flacfile], stderr_to_stdout: false, parallelism: true
-    #IO.puts "...generated intermediate .wav of #{basename}..."
+    IO.write "."
     System.cmd "lame", ["--silent", "--abr", "320", wavfile, mp3file], stderr_to_stdout: false, parallelism: true
     System.cmd "rm", [wavfile], parallelism: true
 
     IO.puts "finished #{basename}"
   end
 
-  @doc """
-  Given a .flac filenname, extract the directory name and the file basename.
-  """
   @spec split_filename(char_list) :: {String.t, String.t}
-  defp split_filename(filename) do
+  @doc """
+  Given a .flac filenname, extract the file basename and the directory name.
+
+  iex> Flex.Worker.split_filename("foo/bar.baz.flac")
+  {"bar.baz", "foo"}
+  """
+  def split_filename(filename) do
     basename = Path.basename(filename, ".flac")
     dirname = Path.dirname(filename)
     {basename, dirname}
