@@ -12,9 +12,6 @@ defmodule Flex.CLI do
     |> Flex.convert_dir
   end
 
-  #@doc """
-  #React to command-line arguments.
-  #"""
   defp parse_args(args) do
     {config, _, _} = OptionParser.parse(args, strict: [dir: :string])
     cond do # ugh
@@ -28,11 +25,15 @@ defmodule Flex.CLI do
     IO.puts """
     usage: flex --dir=<directory>
 
+    required flags:
+
+    --dir:     directory containing .flac files to convert into .mp3s
+
     optional flags:
 
     --help:    you're looking at it
 
-    requirements (in $PATH):
+    system requirements (available in $PATH):
 
     * `flac`
     * `lame`

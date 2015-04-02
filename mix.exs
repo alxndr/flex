@@ -18,6 +18,10 @@ defmodule Flex.Mixfile do
   end
 
   defp deps do
-    [{:inch_ex, only: :docs}]
+    [
+      {:exactor, "~> 2.1.0"},
+      {:inch_ex, only: :docs},
+    ]
   end
+
 end

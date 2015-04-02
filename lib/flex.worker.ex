@@ -10,23 +10,31 @@ defmodule Flex.Worker do
   """
   def convert_flac(flacfile) do
     {basename, dirname} = split_filename(flacfile)
-    IO.write "starting on #{basename}..."
+    IO.puts "starting on #{basename}..."
     wavfile = Path.join(dirname, "#{basename}.wav")
     mp3file = Path.join(dirname, "#{basename}.mp3")
 
-    Task.async(fn -> System.cmd("flac", ["--silent", "--force", "--decode", "--output-name", wavfile, flacfile], stderr_to_stdout: false) end)
-    |> Task.await 10 * @sec
-    IO.write "."
+    # synchronous
+    System.cmd "flac", ["--silent", "--force", "--decode", "--output-name", wavfile, flacfile], stderr_to_stdout: false, parallelism: true
+    System.cmd "lame", ["--silent", "--abr", "320", wavfile, mp3file], stderr_to_stdout: false, parallelism: true
+    System.cmd "rm", [wavfile], parallelism: true
 
-    Task.async(fn -> System.cmd("lame", ["--silent", "--abr", "320", wavfile, mp3file], stderr_to_stdout: false) end)
-    |> Task.await 30 * @sec
-    IO.write "."
+    IO.puts " done #{basename}"
+  end
 
-    Task.async(fn -> System.cmd("rm", [wavfile]) end)
-    |> Task.await 1 * @sec
-    IO.write "."
+  @doc """
+  Parallel execution helper for convert_flac/1.
+  """
+  def spawn_convert_flac(pid, flacfile) do
+    IO.puts "spawning for #{flacfile}"
+    spawn_link __MODULE__, :send_convert_flac, [pid, flacfile]
+  end
 
-    IO.puts " done"
+  @doc """
+  Another parallel execution helper for convert_flac/1.
+  """
+  def send_convert_flac(pid, flacfile) do
+    send pid, {convert_flac(flacfile)}
   end
 
   @doc """
