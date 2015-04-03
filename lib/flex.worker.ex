@@ -4,6 +4,7 @@ defmodule Flex.Worker do
   """
 
   @sec 1_000
+  @lame_options %{type: "abr", bitrate: "320"}
 
   @doc """
   Given a string representing a .flac file, create a corresponding .mp3 file for the .flac file.
@@ -14,10 +15,23 @@ defmodule Flex.Worker do
     mp3file = Path.join(dirname, "#{basename}.mp3")
 
     # synchronous
-    System.cmd "flac", ["--silent", "--force", "--decode", "--output-name", wavfile, flacfile], stderr_to_stdout: false, parallelism: true
+    System.cmd "flac", [
+      "--silent",
+      "--force",
+      "--decode",
+      "--output-name",
+      wavfile,
+      flacfile
+    ], stderr_to_stdout: false
     IO.write "."
-    System.cmd "lame", ["--silent", "--abr", "320", wavfile, mp3file], stderr_to_stdout: false, parallelism: true
-    System.cmd "rm", [wavfile], parallelism: true
+    System.cmd "lame", [
+      "--silent",
+      "--#{@lame_options[:type]}",
+      "#{@lame_options[:bitrate]}",
+      wavfile,
+      mp3file
+    ], stderr_to_stdout: false
+    System.cmd "rm", [wavfile]
 
     IO.puts "finished #{basename}"
   end
