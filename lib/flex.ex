@@ -14,12 +14,13 @@ defmodule Flex do
     check_dependencies
 
     files =
-      Path.expand(dir)
+      dir
+      |> Path.expand
       |> Path.join("**/*.flac")
       |> Path.wildcard
 
     files
-    |> Enum.map(&(spawn_convert_flac(self, &1)))
+    |> Enum.map(&spawn_link __MODULE__, :send_convert_flac, [self, &1])
 
     length(files)
     |> receive_conversions
@@ -33,10 +34,6 @@ defmodule Flex do
           receive_conversions(len - 1)
         end
     end
-  end
-
-  defp spawn_convert_flac(pid, flacfile) do
-    spawn_link __MODULE__, :send_convert_flac, [pid, flacfile]
   end
 
   @doc """
