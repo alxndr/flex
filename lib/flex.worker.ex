@@ -6,6 +6,7 @@ defmodule Flex.Worker do
   @sec 1_000
   @lame_options %{type: "abr", bitrate: "320"}
 
+  @spec convert_flac(char_list)
   @doc """
   Given a string representing a .flac file, create a corresponding .mp3 file for the .flac file.
   """
@@ -14,7 +15,6 @@ defmodule Flex.Worker do
     wavfile = Path.join(dirname, "#{basename}.wav")
     mp3file = Path.join(dirname, "#{basename}.mp3")
 
-    # synchronous
     System.cmd "flac", conversion_options(:flac, wavfile, flacfile), stderr_to_stdout: false
     IO.write "."
     System.cmd "lame", conversion_options(:lame, wavfile, mp3file), stderr_to_stdout: false
