@@ -28,7 +28,7 @@ defmodule Flex do
   defp receive_conversions(0), do: IO.puts "no files found"
   defp receive_conversions(len) do
     receive do
-      anything ->
+      _ ->
         if len > 1 do
           receive_conversions(len - 1)
         end
