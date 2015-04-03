@@ -2,11 +2,13 @@ defmodule Flex.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :flex,
-     version: "0.0.1",
-     elixir: "~> 1.0.0",
-     deps: deps,
-     escript: escript]
+    [
+      app: :flex,
+      version: "0.0.1",
+      elixir: "~> 1.0.0",
+      deps: deps,
+      escript: escript
+    ]
   end
 
   defp escript do
@@ -19,6 +21,7 @@ defmodule Flex.Mixfile do
 
   defp deps do
     [
+      {:espec, "~> 0.3.7", only: :test},
       {:exactor, "~> 2.1.0"},
       {:inch_ex, only: :docs},
     ]
