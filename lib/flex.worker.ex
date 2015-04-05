@@ -11,12 +11,10 @@ defmodule Flex.Worker do
   """
   def convert_flac(flacfile) do
     {basename, dirname} = split_filename(flacfile)
-    wavfile = Path.join(dirname, "#{basename}.wav")
-    mp3file = Path.join(dirname, "#{basename}.mp3")
 
     flacfile
-    |> flac_to_wav(wavfile)
-    |> wav_to_mp3(mp3file)
+    |> flac_to_wav(Path.join(dirname, "#{basename}.wav"))
+    |> wav_to_mp3(Path.join(dirname, "#{basename}.mp3"))
 
     IO.puts "finished #{basename}"
   end
