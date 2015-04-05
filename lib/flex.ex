@@ -14,29 +14,17 @@ defmodule Flex do
   def convert_dir(dir\\".") do
     check_dependencies
 
-    dir
-    |> Path.expand
-    |> Path.join("**/*.flac")
-    |> Path.wildcard
-    |> Enum.map(&spawn_link __MODULE__, :convert_flac, [self, &1])
-    |> Enum.map(&receive_link &1)
-  end
+    count =
+      dir
+      |> Path.expand
+      |> Path.join("**/*.flac")
+      |> Path.wildcard
+      |> Enum.map(&Task.async(Worker, :convert_flac, [&1]))
+      |> Enum.map(&Task.await(&1, @file_conversion_timeout))
+      |> Enum.map(&IO.puts "\nConverted: #{&1}")
+      |> Enum.count()
 
-  @doc """
-  Parallel execution startup helper for convert_flac/1.
-  """
-  def convert_flac(pid, flacfile) do
-    mp3file = Worker.convert_flac(flacfile)
-    send pid, mp3file
-  end
-
-  @doc "Listen for spawned links to finish."
-  def receive_link(pid) do
-    receive do
-      filename -> IO.puts "finished #{filename}"
-    after @file_conversion_timeout ->
-      IO.puts "uh oh, #{inspect pid}"
-    end
+    IO.puts "\nConverted #{count} files"
   end
 
   defp check_dependencies do
