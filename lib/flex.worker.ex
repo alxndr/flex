@@ -15,23 +15,12 @@ defmodule Flex.Worker do
     wavfile = Path.join(dirname, "#{basename}.wav")
     mp3file = Path.join(dirname, "#{basename}.mp3")
 
-    flacfile
-    |> flac_to_wav(wavfile)
-    |> wav_to_mp3(mp3file)
-
-    IO.puts "finished #{basename}"
-  end
-
-  def flac_to_wav(flacfile, wavfile) do
     System.cmd "flac", conversion_options(:flac, wavfile, flacfile), stderr_to_stdout: false
     IO.write "."
-    wavfile
-  end
-
-  def wav_to_mp3(wavfile, mp3file) do
     System.cmd "lame", conversion_options(:lame, wavfile, mp3file), stderr_to_stdout: false
     System.cmd "rm", [wavfile]
-    mp3file
+
+    IO.puts "finished #{basename}"
   end
 
   @spec split_filename(char_list) :: {String.t, String.t}
