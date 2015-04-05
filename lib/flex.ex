@@ -28,13 +28,13 @@ defmodule Flex do
   end
 
   defp check_dependencies do
-    case System.cmd("which", ["flac"]) do
+    case Porcelain.exec("which", ["flac"]) do
       {_, 0} -> true
       _ ->
         IO.puts "need flac in $PATH"
         System.halt(1)
     end
-    case System.cmd("which", ["lame"]) do
+    case Porcelain.exec("which", ["lame"]) do
       {_, 0} -> true
       _ ->
         IO.puts "need lame in $PATH"
