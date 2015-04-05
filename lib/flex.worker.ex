@@ -3,8 +3,6 @@ defmodule Flex.Worker do
   Encapsulates the work that needs to be done on the file system to convert a file from a .flac to a .mp3.
   """
 
-  #alias Porcelain.Result
-
   @sec 1_000
   @lame_options %{type: "abr", bitrate: "320"}
 
