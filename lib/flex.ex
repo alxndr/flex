@@ -6,6 +6,7 @@ defmodule Flex do
   """
 
   @sec 1_000
+  @file_conversion_timeout 30 * @sec
 
   @doc """
   Given a string representing a directory, kick off conversions for each .flac file in the directory.
@@ -13,44 +14,27 @@ defmodule Flex do
   def convert_dir(dir\\".") do
     check_dependencies
 
-    files =
+    count =
       dir
       |> Path.expand
       |> Path.join("**/*.flac")
       |> Path.wildcard
+      |> Enum.map(&Task.async(Worker, :convert_flac, [&1]))
+      |> Enum.map(&Task.await(&1, @file_conversion_timeout))
+      |> Enum.map(&IO.puts "\nConverted: #{&1}")
+      |> Enum.count()
 
-    files
-    |> Enum.map(&spawn_link __MODULE__, :send_convert_flac, [self, &1])
-
-    length(files)
-    |> receive_conversions
-  end
-
-  defp receive_conversions(0), do: IO.puts "no files found"
-  defp receive_conversions(len) do
-    receive do
-      _ ->
-        if len > 1 do
-          receive_conversions(len - 1)
-        end
-    end
-  end
-
-  @doc """
-  Parallel execution startup helper for convert_flac/1.
-  """
-  def send_convert_flac(pid, flacfile) do
-    send pid, Worker.convert_flac(flacfile)
+    IO.puts "\nConverted #{count} files"
   end
 
   defp check_dependencies do
-    case System.cmd("which", ["flac"]) do
+    case Porcelain.exec("which", ["flac"]) do
       {_, 0} -> true
       _ ->
         IO.puts "need flac in $PATH"
         System.halt(1)
     end
-    case System.cmd("which", ["lame"]) do
+    case Porcelain.exec("which", ["lame"]) do
       {_, 0} -> true
       _ ->
         IO.puts "need lame in $PATH"
