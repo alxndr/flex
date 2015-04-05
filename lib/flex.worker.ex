@@ -4,7 +4,7 @@ defmodule Flex.Worker do
   """
 
   @sec 1_000
-  @lame_options %{type: "abr", bitrate: "320"}
+  @mp3_options %{type: "abr", bitrate: "320"}
 
   @spec convert_flac(String.t) :: String.t
   @doc """
@@ -12,7 +12,6 @@ defmodule Flex.Worker do
   """
   def convert_flac(flacfile) do
     {basename, dirname} = split_filename(flacfile)
-
     flacfile
     |> flac_to_wav(Path.join(dirname, "#{basename}.wav"))
     |> wav_to_mp3(Path.join(dirname, "#{basename}.mp3"))
@@ -38,8 +37,8 @@ defmodule Flex.Worker do
   def wav_to_mp3(wavfile, mp3file) do
     Porcelain.exec "lame", [
       "--silent",
-      "--#{@lame_options[:type]}",
-      "#{@lame_options[:bitrate]}",
+      "--#{@mp3_options[:type]}",
+      "#{@mp3_options[:bitrate]}",
       wavfile,
       mp3file
     ]
