@@ -14,13 +14,14 @@ defmodule Flex.Mixfile do
   end
 
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :porcelain]]
   end
 
   defp deps do
     [
       {:exactor, "~> 2.1.0"},
       {:inch_ex, only: :docs},
+      {:porcelain, "~> 2.0"}, # install goon too
     ]
   end
 
