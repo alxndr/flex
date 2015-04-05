@@ -15,8 +15,6 @@ defmodule Flex.Worker do
     flacfile
     |> flac_to_wav(Path.join(dirname, "#{basename}.wav"))
     |> wav_to_mp3(Path.join(dirname, "#{basename}.mp3"))
-
-    IO.puts "finished #{basename}"
   end
 
   @doc "Run system commands to convert a flac file to a wav file."
