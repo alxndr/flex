@@ -6,6 +6,7 @@ defmodule Flex do
   """
 
   @sec 1_000
+  @file_conversion_timeout 30 * @sec
 
   @doc """
   Given a string representing a directory, kick off conversions for each .flac file in the directory.
@@ -21,9 +22,10 @@ defmodule Flex do
 
     files
     |> Enum.map(&spawn_link __MODULE__, :convert_flac, [self, &1])
-    |> Enum.map(fn(_) ->
+    |> Enum.map(fn(pid) ->
       receive do
         _ -> nil
+        after @file_conversion_timeout -> IO.puts "uh oh, #{inspect pid}"
       end
     end)
   end
