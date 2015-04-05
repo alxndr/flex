@@ -34,7 +34,8 @@ defmodule Flex do
   def receive_link(pid) do
     receive do
       filename -> IO.puts "finished #{filename}"
-    after @file_conversion_timeout -> IO.puts "uh oh, #{inspect pid}"
+    after @file_conversion_timeout ->
+      IO.puts "uh oh, #{inspect pid}"
     end
   end
 
