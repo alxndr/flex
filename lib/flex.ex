@@ -20,27 +20,20 @@ defmodule Flex do
       |> Path.wildcard
 
     files
-    |> Enum.map(&spawn_link __MODULE__, :send_convert_flac, [self, &1])
-
-    length(files)
-    |> receive_conversions
-  end
-
-  defp receive_conversions(0), do: IO.puts "no files found"
-  defp receive_conversions(len) do
-    receive do
-      _ ->
-        if len > 1 do
-          receive_conversions(len - 1)
-        end
-    end
+    |> Enum.map(&spawn_link __MODULE__, :convert_flac, [self, &1])
+    |> Enum.map(fn(_) ->
+      receive do
+        _ -> nil
+      end
+    end)
   end
 
   @doc """
   Parallel execution startup helper for convert_flac/1.
   """
-  def send_convert_flac(pid, flacfile) do
-    send pid, Worker.convert_flac(flacfile)
+  def convert_flac(pid, flacfile) do
+    Worker.convert_flac(flacfile)
+    send pid, :done
   end
 
   defp check_dependencies do
