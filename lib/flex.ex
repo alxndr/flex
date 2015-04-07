@@ -30,18 +30,23 @@ defmodule Flex do
   end
 
   defp check_dependencies do
-    case Porcelain.exec("which", ["flac"]) do
+    ["flac", "lame"]
+    |> Enum.filter(&(!can_run &1))
+    |> raise_if_missing
+  end
+
+  defp can_run(system_executable_name) when is_binary(system_executable_name) do
+    case Porcelain.exec("which", [system_executable_name]) do
       %Result{status: 0} -> true
-      _ ->
-        IO.puts "need flac in $PATH"
-        System.halt(1)
+      _ -> false
     end
-    case Porcelain.exec("which", ["lame"]) do
-      %Result{status: 0} -> true
-      _ ->
-        IO.puts "need lame in $PATH"
-        System.halt(1)
-    end
+  end
+
+  defp raise_if_missing([]), do: nil
+  defp raise_if_missing(deps) do
+    missing_deps = Enum.join(deps, ", ")
+    IO.puts "Need to have utilities available in $PATH: #{missing_deps}"
+    System.halt(1)
   end
 
 end
