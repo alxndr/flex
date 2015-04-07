@@ -22,7 +22,7 @@ defmodule Flex do
       |> Enum.map(&Task.async(Worker, :convert_flac, [&1]))
       |> Enum.map(&Task.await(&1, @file_conversion_timeout))
       |> Enum.map(&IO.puts "\nConverted: #{&1}")
-      |> Enum.count()
+      |> Enum.count
 
     IO.puts "\nConverted #{count} files"
   end
