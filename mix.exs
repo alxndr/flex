@@ -4,8 +4,8 @@ defmodule Flex.Mixfile do
   def project do
     [
       app: :flex,
-      version: "0.0.1",
-      elixir: "~> 1.0.0",
+      version: "1.0.0",
+      elixir: "~> 1.0.4",
       deps: deps,
       escript: escript
     ]

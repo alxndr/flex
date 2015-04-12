@@ -4,7 +4,7 @@ otp_release:
 before_install:
   - git clone https://github.com/elixir-lang/elixir
   - cd elixir
-  - git checkout v1.0.2
+  - git checkout v1.0.4
   - cd ..
   - make -C elixir
   - git clone https://github.com/jeremyjh/dialyxir
