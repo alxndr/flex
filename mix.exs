@@ -16,12 +16,14 @@ defmodule Flex.Mixfile do
   end
 
   def application do
-    [applications: [:logger, :porcelain]]
+    [applications: [:httpoison, :logger, :poison, :porcelain]]
   end
 
   defp deps do
     [
+      {:httpoison, "~> 0.6"},
       {:inch_ex, only: :docs},
+      {:poison, "~> 1.4.0"},
       {:porcelain, "~> 2.0"}, # install goon too
     ]
   end
