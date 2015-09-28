@@ -1,6 +1,7 @@
 defmodule Flex.Worker do
   @moduledoc """
-  Encapsulates the work that needs to be done on the file system to convert a file from a .flac to a .mp3.
+  Encapsulates the work that needs to be done on the file system to convert a
+  file from a .flac to a .mp3.
   """
 
   @sec 1_000
@@ -8,7 +9,8 @@ defmodule Flex.Worker do
 
   @spec convert_flac(String.t) :: String.t
   @doc """
-  Given a string representing a .flac file, create a corresponding .mp3 file for the .flac file.
+  Given a string representing a .flac file, create a corresponding .mp3 file for
+  the .flac file.
   """
   def convert_flac(flacfile) do
     {basename, dirname} = split_filename(flacfile)
