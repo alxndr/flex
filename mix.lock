@@ -1,3 +1,4 @@
-%{"inch_ex": {:hex, :inch_ex, "0.2.4"},
+%{"dogma": {:hex, :dogma, "0.0.3"},
+  "inch_ex": {:hex, :inch_ex, "0.2.4"},
   "poison": {:hex, :poison, "1.4.0"},
   "porcelain": {:hex, :porcelain, "2.0.0"}}
