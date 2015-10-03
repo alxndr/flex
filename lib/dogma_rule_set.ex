@@ -4,7 +4,7 @@ defmodule Flex.DogmaRuleSet do
   @custom_rules [
     # to disable a rule, put `false` as the 2nd element in the tuple
     {LineLength, max_length: 100},
-    # {ModuleDoc, false},
+    {ModuleDoc, false},
   ]
 
   def rules do
