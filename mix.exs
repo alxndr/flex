@@ -21,7 +21,7 @@ defmodule Flex.Mixfile do
 
   defp deps do
     [
-      {:dogma, "~> 0.0", only: :dev},
+      {:dogma, "~> 0.0.8", only: :dev},
       {:inch_ex, only: :docs},
       {:porcelain, "~> 2.0"}, # install goon too
     ]
