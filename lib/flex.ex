@@ -11,7 +11,8 @@ defmodule Flex do
   @file_conversion_timeout 30 * @sec
 
   @doc """
-  Given a string representing a directory, kick off conversions for each .flac file in the directory.
+  Given a string representing a directory, kick off conversions for each .flac file in the
+  directory.
   """
   def convert_dir(dir\\".") do
     check_dependencies
