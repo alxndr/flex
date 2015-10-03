@@ -1,5 +1,5 @@
 language: elixir
-script: mix test
+script: mix do dogma, test
 after_script:
   - MIX_ENV=docs mix deps.get
   - MIX_ENV=docs mix inch.report
