@@ -2,7 +2,7 @@ defmodule Flex.DogmaRuleSet do
 
   @behaviour Dogma.RuleSet
   @custom_rules [
-    # to disable a rule, put `false` as the 2nd element in the tuple
+    # to deactivate a rule, set the second element in the tuple to `false`
     {LineLength, max_length: 100},
     {ModuleDoc, false},
   ]
@@ -10,7 +10,7 @@ defmodule Flex.DogmaRuleSet do
   def rules do
     Dogma.RuleSet.All.rules
     |> Enum.filter(&(!overridden_rule?(&1)))
-    |> Enum.concat(remove_disabled_rules(@custom_rules))
+    |> Enum.concat(active_rules)
   end
 
   defp overridden_rule?(rule) do
@@ -18,14 +18,14 @@ defmodule Flex.DogmaRuleSet do
     Enum.any? @custom_rules, &(get_rule_name(&1) == rule_name)
   end
 
-  defp remove_disabled_rules(custom_rules) do
-    custom_rules
-    |> Enum.filter(fn
-      {_, false} -> false
-      _          -> true
-    end)
-  end
-
   defp get_rule_name({name}), do: name
   defp get_rule_name({name, _}), do: name
+
+  defp active_rules do
+    @custom_rules
+    |> Enum.filter(&activated_rule?/1)
+  end
+
+  defp activated_rule?({_name, false}), do: false
+  defp activated_rule?(_custom_rule),   do: true
 end
