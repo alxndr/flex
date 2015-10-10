@@ -1,4 +1,7 @@
 defmodule Flex.DogmaRuleSet do
+  @moduledoc """
+  Custom set of rules for Dogma.
+  """
 
   @behaviour Dogma.RuleSet
   @custom_rules [
