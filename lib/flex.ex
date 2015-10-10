@@ -8,7 +8,7 @@ defmodule Flex do
   alias Porcelain.Result
 
   @sec 1_000
-  @file_conversion_timeout 30 * @sec
+  @file_conversion_timeout 90 * @sec
 
   @doc """
   Given a string representing a directory, kick off conversions for each .flac file in the
