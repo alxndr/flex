@@ -11,10 +11,17 @@ Dependencies (need to be available via the system's `$PATH`):
 * `lame`
 * `flac`
 
-### compiling a file for commandline usage
 
-    mix escript.build  # creates an executable file ./flex
+# building and usage
+
+In the base directory of the project, create an executable `./flex` binary file:
+
+    mix escript.build
+
+Run the binary, passing it the directory of .flac files to convert:
+
     ./flex --dir=/path/to/dir/of/flacs
+
 
 [inch-status]: http://inch-ci.org/github/alxndr/flex "documentation report at Inch-CI"
 [inch-status-image]: http://inch-ci.org/github/alxndr/flex.svg?branch=master "documentation report at Inch-CI"
