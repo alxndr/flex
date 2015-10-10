@@ -1,10 +1,12 @@
 defmodule Flex.DogmaRuleSet do
+  @moduledoc """
+  Custom set of rules for Dogma.
+  """
 
   @behaviour Dogma.RuleSet
   @custom_rules [
     # to deactivate a rule, set the second element in the tuple to `false`
     {LineLength, max_length: 100},
-    {ModuleDoc, false},
   ]
 
   def rules do
