@@ -1,5 +1,6 @@
 defmodule Flex do
   alias Flex.Worker
+  alias Flex.Parser
 
   @moduledoc """
   Finds .flac files and creates corresponding .wav and then .mp3 files from them.
